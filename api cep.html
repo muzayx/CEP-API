@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>API</title>
+		<style type="text/css">
+			
+			
+		</style>
+		<script type="text/javascript">
+			function meu_callback(conteudo) {
+			    if (!("erro" in conteudo)) {
+			        document.getElementById('log').value=(conteudo.logradouro);
+		            document.getElementById('bairro').value=(conteudo.bairro);
+		            document.getElementById('cidade').value=(conteudo.localidade);
+		            document.getElementById('uf').value=(conteudo.uf);
+		            document.getElementById('ibge').value=(conteudo.ibge);
+		            document.getElementById('log').readOnly = true;
+		            document.getElementById('bairro').readOnly = true;
+		            document.getElementById('cidade').readOnly = true;
+		            document.getElementById('uf').readOnly = true;
+		            document.getElementById('ibge').readOnly = true;
+			    } 
+			    else {
+			        limpa_formulário_cep();
+			        alert("CEP não encontrado.");
+			    }
+			}
+
+			function buscaCEP() {
+				cep = document.cad1.cep.value;	
+
+				if (cep != "") {
+
+		            var validacep = /^[0-9]{8}$/;
+
+		            if(validacep.test(cep)) {
+
+		                document.getElementById('log').value="Pesquisando...";
+		                document.getElementById('bairro').value="Pesquisando...";
+		                document.getElementById('cidade').value="Pesquisando...";
+		                document.getElementById('uf').value="Pesquisando...";
+		                document.getElementById('ibge').value="Pesquisando...";
+
+
+		                var script = document.createElement('script');
+
+		                script.src = 'https://viacep.com.br/ws/'+ cep + '/json/?callback=meu_callback';
+
+		                document.body.appendChild(script);
+
+		            } 
+		            else {
+		                
+		                limpa_formulário_cep();
+		                alert("Formato de CEP inválido.");
+		                document.getElementById('log').readOnly = false;
+		                document.getElementById('bairro').readOnly = false;
+		                document.getElementById('cidade').readOnly = false;
+		                document.getElementById('uf').readOnly = false;
+		                document.getElementById('ibge').readOnly = false;
+		            }
+		        } 
+		        else {
+		            limpa_formulário_cep();
+		        }
+
+		        function limpa_formulário_cep() {
+				    document.getElementById('log').value=("");
+				    document.getElementById('bairro').value=("");
+		            document.getElementById('cidade').value=("");
+		            document.getElementById('uf').value=("");
+		            document.getElementById('ibge').value=("");
+				}
+	    	};
+		</script>
+	</head>
+	<body>
+		<form name="cad1">
+			<div class="form-group">
+				<label for="cep">CEP: </label><br>
+				<input type="text" class="form-control" name="cep" id="cep" value="" size="40" minlength="8" maxlength="8" onblur="buscaCEP()"><br><br>
+
+				<label for="log">Logradouro: </label><br>
+				<input type="text" class="form-control" name="log" id="log" size="40"readOnly><br><br>
+
+				<label for="bairro">Bairro: </label><br>
+				<input type="text" class="form-control" name="bairro" id="bairro" size="40"readOnly><br><br>
+
+				<label for="cidade">Cidade: </label><br>
+				<input type="text" class="form-control" name="cidade" id="cidade" size="40"readOnly><br><br>
+
+				<label for="uf">UF: </label><br>
+				<input type="text" class="form-control" name="uf" id="uf" size="40"readOnly><br><br>
+
+				<label for="ibge">IBGE: </label><br>
+				<input type="text" class="form-control" name="ibge" id="ibge" size="40"readOnly>
+			</div>
+		</form>
+	</body>
+</html>
